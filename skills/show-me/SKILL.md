@@ -108,29 +108,27 @@ Three rules that keep a board honest:
 
 ## Opening it properly
 
-**`open -a "Google Chrome" file.html` is not showing them anything.** It creates the tab and does
+**`open -a Arc file.html` is not showing them anything.** It creates the tab and does
 not bring the browser forward, so it stacks up behind whatever they are actually looking at. On
 macOS use this instead:
 
 ```bash
 osascript <<'EOF'
-tell application "Google Chrome"
+tell application "Arc"
   activate
-  set w to front window
-  make new tab at end of tabs of w with properties {URL:"file:///ABSOLUTE/PATH"}
-  set active tab index of w to (count of tabs of w)
+  tell front window to make new tab with properties {URL:"file:///ABSOLUTE/PATH"}
 end tell
 EOF
 ```
 
-`activate` brings the window forward and setting `active tab index` selects the new tab. You need
-both. On Linux, `xdg-open` is the equivalent, and on Windows, `start`.
+`activate` brings the window forward, and Arc selects the new tab. On Linux, `xdg-open` is the
+equivalent, and on Windows, `start`.
 
 **Then verify it worked.** Read the active tab's URL back and check it is yours - another window
 or another process may have taken focus in between:
 
 ```bash
-osascript -e 'tell application "Google Chrome" to return URL of active tab of front window'
+osascript -e 'tell application "Arc" to return URL of active tab of front window'
 ```
 
 A command that exits 0 is proof it ran, never proof they saw it.
